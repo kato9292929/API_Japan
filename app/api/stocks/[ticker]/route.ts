@@ -18,12 +18,16 @@ async function handler(
   }
 }
 
-export const GET = withX402(handler, resourceServer, {
-  accepts: {
-    scheme: "exact",
-    price: "$0.01",
-    network: NETWORK,
-    payTo: WALLET_ADDRESS,
+export const GET = withX402(
+  handler,
+  {
+    accepts: {
+      scheme: "exact",
+      price: "$0.01",
+      network: NETWORK,
+      payTo: WALLET_ADDRESS,
+    },
+    description: "TSE Stock Data",
   },
-  description: "TSE Stock Data",
-});
+  resourceServer
+);

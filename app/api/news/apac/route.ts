@@ -13,12 +13,16 @@ async function handler(_req: NextRequest) {
   }
 }
 
-export const GET = withX402(handler, resourceServer, {
-  accepts: {
-    scheme: "exact",
-    price: "$0.005",
-    network: NETWORK,
-    payTo: WALLET_ADDRESS,
+export const GET = withX402(
+  handler,
+  {
+    accepts: {
+      scheme: "exact",
+      price: "$0.005",
+      network: NETWORK,
+      payTo: WALLET_ADDRESS,
+    },
+    description: "APAC Crypto News",
   },
-  description: "APAC Crypto News",
-});
+  resourceServer
+);
