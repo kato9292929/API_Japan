@@ -25,7 +25,20 @@ All endpoints return `402 Payment Required` until a valid x402 payment header is
 
 ## Quick Start (GitHub Codespaces)
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/YOUR_USERNAME/japan-x402-apis)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/kato9292929/API_Japan)
+
+**Codespaces で始める手順：**
+
+1. 上のバッジをクリック → Codespace が自動起動（`npm install` まで自動実行）
+2. ターミナルで `.env.local` にウォレットアドレスを設定：
+   ```bash
+   echo "WALLET_ADDRESS=0xYourWalletAddress" >> .env.local
+   ```
+3. 開発サーバーを起動：
+   ```bash
+   npm run dev
+   ```
+4. Codespace が自動的にポート 3000 を転送してブラウザで開きます
 
 ### 1. Clone and install
 
