@@ -1,4 +1,4 @@
-import { paymentMiddleware } from "x402/next";
+import { paymentMiddleware } from "@x402/next";
 
 const FACILITATOR_URL =
   process.env.FACILITATOR_URL ?? "https://x402.org/facilitator";
