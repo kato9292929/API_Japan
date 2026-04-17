@@ -1,0 +1,203 @@
+{
+  "$schema": "https://x402.org/schema/discovery/v1",
+  "version": "1.0",
+  "name": "Japan x402 APIs",
+  "description": "Japan & APAC data APIs with x402 micropayment gating on Base Sepolia",
+  "network": "base-sepolia",
+  "facilitator": "https://x402.org/facilitator",
+  "endpoints": [
+    {
+      "path": "/api/weather/{city}",
+      "method": "GET",
+      "name": "Japan Weather",
+      "description": "Current weather for Japanese cities: temperature, humidity, wind speed. Powered by Open-Meteo.",
+      "price": {
+        "amount": "0.001",
+        "currency": "USDC",
+        "network": "base-sepolia"
+      },
+      "parameters": {
+        "city": {
+          "in": "path",
+          "type": "string",
+          "required": true,
+          "description": "City name",
+          "enum": ["tokyo", "osaka", "kyoto", "fukuoka", "sapporo", "nagoya", "hiroshima"]
+        }
+      },
+      "response": {
+        "content_type": "application/json",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "city": { "type": "string" },
+            "temperature_c": { "type": "number" },
+            "temperature_f": { "type": "number" },
+            "weathercode": { "type": "integer" },
+            "description": { "type": "string" },
+            "humidity_pct": { "type": "number" },
+            "windspeed_kmh": { "type": "number" },
+            "timestamp": { "type": "string", "format": "date-time" }
+          }
+        }
+      },
+      "example": {
+        "request": "GET /api/weather/tokyo",
+        "response": {
+          "city": "Tokyo",
+          "temperature_c": 22.5,
+          "temperature_f": 72.5,
+          "weathercode": 1,
+          "description": "Mainly clear",
+          "humidity_pct": 65,
+          "windspeed_kmh": 12.3,
+          "timestamp": "2026-04-17T09:00:00.000Z"
+        }
+      }
+    },
+    {
+      "path": "/api/fx/{pair}",
+      "method": "GET",
+      "name": "JPY Exchange Rates",
+      "description": "Real-time JPY exchange rates. Powered by ExchangeRate-API.",
+      "price": {
+        "amount": "0.001",
+        "currency": "USDC",
+        "network": "base-sepolia"
+      },
+      "parameters": {
+        "pair": {
+          "in": "path",
+          "type": "string",
+          "required": true,
+          "description": "Currency pair",
+          "enum": ["USDJPY", "EURJPY", "GBPJPY"]
+        }
+      },
+      "response": {
+        "content_type": "application/json",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "pair": { "type": "string" },
+            "base": { "type": "string" },
+            "quote": { "type": "string" },
+            "rate": { "type": "number" },
+            "previous_rate": { "type": ["number", "null"] },
+            "change": { "type": ["number", "null"] },
+            "change_pct": { "type": ["number", "null"] },
+            "timestamp": { "type": "string" },
+            "source": { "type": "string" }
+          }
+        }
+      },
+      "example": {
+        "request": "GET /api/fx/USDJPY",
+        "response": {
+          "pair": "USDJPY",
+          "base": "USD",
+          "quote": "JPY",
+          "rate": 149.82,
+          "previous_rate": null,
+          "change": null,
+          "change_pct": null,
+          "timestamp": "Thu, 17 Apr 2026 00:00:01 +0000",
+          "source": "open.er-api.com"
+        }
+      }
+    },
+    {
+      "path": "/api/news/apac",
+      "method": "GET",
+      "name": "APAC Crypto News",
+      "description": "Latest 10 crypto news headlines from APAC region (JP, KR, CN, SG) with sentiment scores.",
+      "price": {
+        "amount": "0.005",
+        "currency": "USDC",
+        "network": "base-sepolia"
+      },
+      "parameters": {},
+      "response": {
+        "content_type": "application/json",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "count": { "type": "integer" },
+            "region": { "type": "string" },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "integer" },
+                  "title": { "type": "string" },
+                  "url": { "type": "string", "format": "uri" },
+                  "source": { "type": "string" },
+                  "published_at": { "type": "string", "format": "date-time" },
+                  "sentiment": { "type": "string", "enum": ["positive", "negative", "neutral"] },
+                  "currencies": { "type": "array", "items": { "type": "string" } }
+                }
+              }
+            },
+            "timestamp": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    },
+    {
+      "path": "/api/stocks/{ticker}",
+      "method": "GET",
+      "name": "TSE Stock Data",
+      "description": "Tokyo Stock Exchange stock data: price, volume, PER.",
+      "price": {
+        "amount": "0.01",
+        "currency": "USDC",
+        "network": "base-sepolia"
+      },
+      "parameters": {
+        "ticker": {
+          "in": "path",
+          "type": "string",
+          "required": true,
+          "description": "TSE ticker symbol (e.g. 7203.T, 9984.T)",
+          "examples": ["7203.T", "9984.T", "6758.T", "7974.T"]
+        }
+      },
+      "response": {
+        "content_type": "application/json",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "ticker": { "type": "string" },
+            "name": { "type": "string" },
+            "price": { "type": "number" },
+            "currency": { "type": "string" },
+            "change": { "type": "number" },
+            "change_pct": { "type": "number" },
+            "volume": { "type": "integer" },
+            "market_cap": { "type": ["number", "null"] },
+            "per": { "type": ["number", "null"] },
+            "exchange": { "type": "string" },
+            "timestamp": { "type": "string", "format": "date-time" }
+          }
+        }
+      },
+      "example": {
+        "request": "GET /api/stocks/7203.T",
+        "response": {
+          "ticker": "7203.T",
+          "name": "Toyota Motor Corporation",
+          "price": 2800,
+          "currency": "JPY",
+          "change": 35.0,
+          "change_pct": 1.27,
+          "volume": 3200000,
+          "market_cap": null,
+          "per": 9.8,
+          "exchange": "Tokyo Stock Exchange",
+          "timestamp": "2026-04-17T09:00:00.000Z"
+        }
+      }
+    }
+  ]
+}
