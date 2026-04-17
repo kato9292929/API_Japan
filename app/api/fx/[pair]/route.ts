@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
+import { withX402 } from "@x402/next";
+import { resourceServer, WALLET_ADDRESS, NETWORK } from "@/lib/x402-server";
 import { fetchFxRate } from "@/lib/providers/fx";
 
-export async function GET(
+async function handler(
   _req: NextRequest,
   { params }: { params: Promise<{ pair: string }> }
 ) {
   const { pair } = await params;
-
   try {
     const data = await fetchFxRate(pair);
     return NextResponse.json(data);
@@ -16,3 +17,13 @@ export async function GET(
     return NextResponse.json({ error: message }, { status });
   }
 }
+
+export const GET = withX402(handler, resourceServer, {
+  accepts: {
+    scheme: "exact",
+    price: "$0.001",
+    network: NETWORK,
+    payTo: WALLET_ADDRESS,
+  },
+  description: "JPY Exchange Rates",
+});
