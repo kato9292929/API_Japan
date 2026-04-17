@@ -3,11 +3,8 @@ import { withX402 } from "@x402/next";
 import { resourceServer, WALLET_ADDRESS, NETWORK } from "@/lib/x402-server";
 import { fetchWeather } from "@/lib/providers/weather";
 
-const handler = async (
-  _req: NextRequest,
-  { params }: { params: Promise<{ city: string }> }
-) => {
-  const { city } = await params;
+const handler = async (req: NextRequest) => {
+  const city = req.nextUrl.pathname.split("/").pop() ?? "";
   try {
     const data = await fetchWeather(city);
     return NextResponse.json(data);

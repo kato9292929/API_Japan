@@ -3,11 +3,8 @@ import { withX402 } from "@x402/next";
 import { resourceServer, WALLET_ADDRESS, NETWORK } from "@/lib/x402-server";
 import { fetchFxRate } from "@/lib/providers/fx";
 
-const handler = async (
-  _req: NextRequest,
-  { params }: { params: Promise<{ pair: string }> }
-) => {
-  const { pair } = await params;
+const handler = async (req: NextRequest) => {
+  const pair = req.nextUrl.pathname.split("/").pop() ?? "";
   try {
     const data = await fetchFxRate(pair);
     return NextResponse.json(data);

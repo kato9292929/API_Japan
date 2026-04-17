@@ -3,11 +3,8 @@ import { withX402 } from "@x402/next";
 import { resourceServer, WALLET_ADDRESS, NETWORK } from "@/lib/x402-server";
 import { fetchStockData } from "@/lib/providers/stocks";
 
-const handler = async (
-  _req: NextRequest,
-  { params }: { params: Promise<{ ticker: string }> }
-) => {
-  const { ticker } = await params;
+const handler = async (req: NextRequest) => {
+  const ticker = req.nextUrl.pathname.split("/").pop() ?? "";
   try {
     const data = await fetchStockData(ticker);
     return NextResponse.json(data);
