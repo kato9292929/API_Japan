@@ -13,4 +13,4 @@ export const WALLET_ADDRESS = (
 
 export const resourceServer = new x402ResourceServer(
   new HTTPFacilitatorClient({ url: FACILITATOR_URL })
-).register(NETWORK, new ExactEvmScheme());
+).register("eip155:*", new ExactEvmScheme());

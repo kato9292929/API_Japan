@@ -3,10 +3,10 @@ import { withX402 } from "@x402/next";
 import { resourceServer, WALLET_ADDRESS, NETWORK } from "@/lib/x402-server";
 import { fetchFxRate } from "@/lib/providers/fx";
 
-async function handler(
+const handler = async (
   _req: NextRequest,
   { params }: { params: Promise<{ pair: string }> }
-) {
+) => {
   const { pair } = await params;
   try {
     const data = await fetchFxRate(pair);
@@ -16,18 +16,21 @@ async function handler(
     const status = message.startsWith("Unsupported pair") ? 400 : 502;
     return NextResponse.json({ error: message }, { status });
   }
-}
+};
 
 export const GET = withX402(
   handler,
   {
-    accepts: {
-      scheme: "exact",
-      price: "$0.001",
-      network: NETWORK,
-      payTo: WALLET_ADDRESS,
-    },
-    description: "JPY Exchange Rates",
+    accepts: [
+      {
+        scheme: "exact",
+        price: "$0.001",
+        network: NETWORK,
+        payTo: WALLET_ADDRESS,
+      },
+    ],
+    description: "JPY Exchange Rates - USDJPY, EURJPY, GBPJPY",
+    mimeType: "application/json",
   },
   resourceServer
 );

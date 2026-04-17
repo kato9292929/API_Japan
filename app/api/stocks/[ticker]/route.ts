@@ -3,10 +3,10 @@ import { withX402 } from "@x402/next";
 import { resourceServer, WALLET_ADDRESS, NETWORK } from "@/lib/x402-server";
 import { fetchStockData } from "@/lib/providers/stocks";
 
-async function handler(
+const handler = async (
   _req: NextRequest,
   { params }: { params: Promise<{ ticker: string }> }
-) {
+) => {
   const { ticker } = await params;
   try {
     const data = await fetchStockData(ticker);
@@ -16,18 +16,21 @@ async function handler(
     const status = message.startsWith("Invalid TSE") ? 400 : 502;
     return NextResponse.json({ error: message }, { status });
   }
-}
+};
 
 export const GET = withX402(
   handler,
   {
-    accepts: {
-      scheme: "exact",
-      price: "$0.01",
-      network: NETWORK,
-      payTo: WALLET_ADDRESS,
-    },
-    description: "TSE Stock Data",
+    accepts: [
+      {
+        scheme: "exact",
+        price: "$0.01",
+        network: NETWORK,
+        payTo: WALLET_ADDRESS,
+      },
+    ],
+    description: "TSE Stock Data - price, volume, PER",
+    mimeType: "application/json",
   },
   resourceServer
 );
